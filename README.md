@@ -4,6 +4,22 @@ FastAPI demo of offline payment packets moving through a simulated mesh and sett
 
 The UI is intentionally minimal and responsive so the packet flow is easy to follow on desktop and mobile.
 
+An offline payment is packaged and encrypted on a device, then relayed across the simulated mesh. A bridge forwards queued packets to the backend, where idempotent ingestion prevents duplicate delivery from settling the same packet twice.
+
+```mermaid
+flowchart LR
+  A[Sender device] --> B[Create and encrypt payment packet]
+  B --> C[Offline device queue]
+  C --> D[Gossip between mesh peers]
+  D --> E[Bridge flush]
+  E --> F[Backend idempotent ingest]
+  F --> G[Settlement and transaction store]
+  G --> H[Dashboard balances and history]
+  H --> I[Send, gossip, flush, reset controls]
+```
+
+The UI exposes each step so the packet lifecycle can be followed. This is a local simulation with an in-memory SQLite store, not a connection to a real UPI rail or bank.
+
 ## Run it
 
 ```bash
@@ -43,3 +59,4 @@ Open http://localhost:8080 for the dashboard.
 ```bash
 pytest tests/ -v
 ```
+
