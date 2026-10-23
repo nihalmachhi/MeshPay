@@ -2,7 +2,7 @@
   <img src="assets/readme-icon.png" alt="MeshPay icon" width="112" />
 </p>
 
-# UPI Offline Mesh
+<h1 align="center">UPI Offline Mesh</h1>
 
 FastAPI demo of offline payment packets moving through a simulated mesh and settling once a bridge device reaches the backend.
 
