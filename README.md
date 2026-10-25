@@ -11,19 +11,15 @@ The UI is intentionally minimal and responsive so the packet flow is easy to fol
 An offline payment is packaged and encrypted on a device, then relayed across the simulated mesh. A bridge forwards queued packets to the backend, where idempotent ingestion prevents duplicate delivery from settling the same packet twice.
 
 ```mermaid
-flowchart TD
-  A[Sender creates payment intent] --> B[Validate and package payment data]
-  B --> C[Encrypt packet for simulated payment service]
-  C --> D[Store packet in sender device queue]
-  D --> E[Relay packet through reachable mesh peers]
-  E --> F[Bridge device forwards queued packets]
-  F --> G[Backend decrypts and validates packet]
-  G --> H[Idempotency check prevents duplicate settlement]
-  H --> I[Settlement service updates transaction state]
-  I --> J[(SQLite transaction store)]
-  J --> K[Dashboard balances and history]
-  K --> L[Send, gossip, flush, and reset controls]
-  L --> A
+flowchart LR
+  A[Sender device] --> B[Create and encrypt payment packet]
+  B --> C[Offline device queue]
+  C --> D[Gossip between mesh peers]
+  D --> E[Bridge flush]
+  E --> F[Backend idempotent ingest]
+  F --> G[Settlement and transaction store]
+  G --> H[Dashboard balances and history]
+  H --> I[Send, gossip, flush, reset controls]
 ```
 
 The UI exposes each step so the packet lifecycle can be followed. This is a local simulation with an in-memory SQLite store, not a connection to a real UPI rail or bank.
